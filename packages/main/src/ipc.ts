@@ -1,4 +1,5 @@
-import { ipcMain, BrowserWindow, IpcMainEvent } from 'electron';
+import type { BrowserWindow, IpcMainEvent } from 'electron';
+import { ipcMain } from './electron';
 import { openPlayerHtml, playerWindowMaps } from './function/openPlayerHtml';
 import ipcTheme, { NATIVE_THEME_CHANGE_CHANNEL } from './function/ipcTheme';
 import weiboLogin from './function/weiboLogin';

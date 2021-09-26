@@ -4,6 +4,7 @@ import rimraf from 'rimraf';
 import fse from 'fs-extra';
 import builder from 'electron-builder';
 import { requireJson } from '@sweet-milktea/utils';
+import npmInstall from './npm-install.mjs';
 import { __dirname, cwd, appDir, staticsDir, build, output, unpacked } from './utils.mjs';
 
 const rimrafPromise = util.promisify(rimraf);
@@ -50,7 +51,9 @@ function config(outputDir, target) {
       '!**/node_modules/*/{.editorconfig,.eslintignore,.eslintrc.js,.eslintrc.cjs,.gitignore}',
       '!**/node_modules/*/*.{yml,yaml}',
       '!**/node_modules/*/{LICENSE,license,License}',
-      '!**/node_modules/*/AUTHORS'
+      '!**/node_modules/*/AUTHORS',
+      '!package-lock.json',
+      '!**/node_modules/.package-lock.json'
     ],
     mac: {
       target: 'dir',
@@ -65,6 +68,7 @@ function config(outputDir, target) {
       icon: icon.linux,
       executableName: '48tools'
     },
+    npmRebuild: false,
     electronDownload: {
       version: electronDownloadVersion
     },
@@ -75,7 +79,7 @@ function config(outputDir, target) {
     // 解压node-media-server服务线程使用的文件
     asarUnpack: [
       'node_modules/asar-node',
-      'bin/lib/nodeMediaServer/server.worker.js'
+      'bin/lib/nodeMediaServer/server.worker.mjs'
     ]
   };
 
@@ -124,6 +128,7 @@ async function unpack() {
     fse.copy(path.join(packages, 'main/lib'), path.join(appDir, 'bin/lib')),
     fse.copy(path.join(packages, '48tools/dist'), path.join(appDir, 'dist'))
   ]);
+  await npmInstall();
 
   // 编译mac
   await builder.build({

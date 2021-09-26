@@ -1,5 +1,6 @@
 import { EventEmitter } from 'node:events';
-import { ipcMain, nativeTheme, IpcMainEvent } from 'electron';
+import type { IpcMainEvent } from 'electron';
+import { ipcMain, nativeTheme } from '../electron';
 
 export type ThemeValue = 'light' | 'dark' | 'system';
 

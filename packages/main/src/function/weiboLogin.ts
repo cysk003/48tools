@@ -1,10 +1,11 @@
-import { BrowserWindow, Session, Cookie } from 'electron';
+import type { BrowserWindow as BrowserWindowType, Session, Cookie } from 'electron';
+import { BrowserWindow } from '../electron';
 
 const weiboUrl: string = 'https://weibo.com/';
-let weiboLoginWin: BrowserWindow | null = null;
+let weiboLoginWin: BrowserWindowType | null = null;
 
 /* 微博登陆 */
-function weiboLogin(win: BrowserWindow): void {
+function weiboLogin(win: BrowserWindowType): void {
   if (weiboLoginWin !== null) {
     return;
   }

@@ -11,17 +11,18 @@ interface WorkerData extends NodeMediaServerArg {
 const { ffmpeg, rtmpPort, httpPort, isDevelopment }: WorkerData = workerData;
 
 // 根据不同的环境加载node-media-server模块
-const NodeMediaServerModule: typeof NodeMediaServer = (function(): typeof NodeMediaServer {
-  if (isDevelopment) {
-    return require('node-media-server');
-  } else {
-    register();
-    addAsarToLookupPaths();
+let NodeMediaServerModule: typeof NodeMediaServer;
 
-    // eslint-disable-next-line import/no-unresolved
-    return require('../../../../app.asar/node_modules/node-media-server/src/node_media_server.js');
-  }
-})();
+if (isDevelopment) {
+  NodeMediaServerModule = (await import('node-media-server')).default;
+} else {
+  register();
+  addAsarToLookupPaths();
+
+  // @ts-ignore
+  // eslint-disable-next-line import/no-unresolved
+  NodeMediaServerModule = (await import('../../../../app.asar/node_modules/node-media-server/src/node_media_server.js')).default;
+}
 
 // node-medie-server
 const server: NodeMediaServer = new NodeMediaServerModule({

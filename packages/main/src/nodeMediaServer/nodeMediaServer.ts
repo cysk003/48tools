@@ -1,8 +1,11 @@
 import * as path from 'node:path';
 import * as process from 'node:process';
 import { Worker } from 'node:worker_threads';
-import { ipcMain, IpcMainEvent } from 'electron';
-import { isDevelopment } from '../utils';
+import type { IpcMainEvent } from 'electron';
+import { ipcMain } from '../electron';
+import { isDevelopment, metaHelper, MetaHelper } from '../utils';
+
+const { __dirname }: MetaHelper = metaHelper(import.meta.url);
 
 /* node-media-server服务线程 */
 let nodeMediaServerWorker: Worker | null = null;
@@ -31,8 +34,8 @@ export function nodeMediaServerInit(): void {
     // 对多线程的处理，参考https://github.com/electron/electron/issues/22446
     nodeMediaServerWorker = new Worker(
       isDevelopment
-        ? path.join(__dirname, 'server.worker.js')
-        : path.join(process.resourcesPath, 'app.asar.unpacked/bin/lib/nodeMediaServer/server.worker.js'),
+        ? path.join(__dirname, 'server.worker.mjs')
+        : path.join(process.resourcesPath, 'app.asar.unpacked/bin/lib/nodeMediaServer/server.worker.mjs'),
       {
         workerData: {
           ...arg,

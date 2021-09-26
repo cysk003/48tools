@@ -1,12 +1,15 @@
 import * as path from 'node:path';
 import * as querystring from 'node:querystring';
-import { BrowserWindow } from 'electron';
 import * as remoteMain from '@electron/remote/main';
-import { isDevelopment } from '../utils';
+import type { BrowserWindow as BrowserWindowType } from 'electron';
+import { BrowserWindow } from '../electron';
+import { isDevelopment, metaHelper, MetaHelper } from '../utils';
 import { themeEvent, ThemeValue } from './ipcTheme';
 
+const { __dirname }: MetaHelper = metaHelper(import.meta.url);
+
 /* 记录id和窗口的关系 */
-export const playerWindowMaps: Map<string, BrowserWindow> = new Map();
+export const playerWindowMaps: Map<string, BrowserWindowType> = new Map();
 
 /**
  * 打开播放器页面
@@ -15,7 +18,7 @@ export const playerWindowMaps: Map<string, BrowserWindow> = new Map();
  */
 export function openPlayerHtml(title: string, query: string): void {
   const { id }: { id?: string } = querystring.parse(query);
-  let win: BrowserWindow | null = new BrowserWindow({
+  let win: BrowserWindowType | null = new BrowserWindow({
     width: 300,
     height: 680,
     webPreferences: {
