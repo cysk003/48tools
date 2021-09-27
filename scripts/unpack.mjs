@@ -52,6 +52,7 @@ function config(outputDir, target) {
       '!**/node_modules/*/*.{yml,yaml}',
       '!**/node_modules/*/{LICENSE,license,License}',
       '!**/node_modules/*/AUTHORS',
+      '!version.json',
       '!package-lock.json',
       '!**/node_modules/.package-lock.json'
     ],
